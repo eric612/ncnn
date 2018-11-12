@@ -277,7 +277,48 @@ void mobilenet_yolo_run(const ncnn::Net& net)
     ncnn::Mat out;
     ex.extract("detection_out", out);
 }
+void mobilenet_yolov3_init(ncnn::Net& net)
+{
+    net.load_param("mobilenet_yolov3.param");
+}
+void mobilenet_yolov3_run(const ncnn::Net& net)
+{
+    ncnn::Extractor ex = net.create_extractor();
 
+    ncnn::Mat in(320, 320, 3);
+    ex.input("data", in);
+
+    ncnn::Mat out;
+    ex.extract("detection_out", out);
+}
+void mobilenet_yolov3_init2(ncnn::Net& net)
+{
+    net.load_param("mobilenet_yolov3.param");
+}
+void mobilenet_yolov3_run2(const ncnn::Net& net)
+{
+    ncnn::Extractor ex = net.create_extractor();
+
+    ncnn::Mat in(416, 416, 3);
+    ex.input("data", in);
+
+    ncnn::Mat out;
+    ex.extract("detection_out", out);
+}
+void yolov3_init(ncnn::Net& net)
+{
+	net.load_param("yolov3.param");
+}
+void yolov3_run(const ncnn::Net& net)
+{
+	ncnn::Extractor ex = net.create_extractor();
+
+	ncnn::Mat in(608, 608, 3);
+	ex.input("data", in);
+
+	ncnn::Mat out;
+	ex.extract("detection_out", out);
+}
 void mnasnet_init(ncnn::Net& net)
 {
     net.load_param("mnasnet.param");
@@ -357,8 +398,11 @@ int main(int argc, char** argv)
     benchmark("squeezenet-ssd", squeezenet_ssd_init, squeezenet_ssd_run);
 
     benchmark("mobilenet-ssd", mobilenet_ssd_init, mobilenet_ssd_run);
+	
+	benchmark("mobilenet-yolov3-320", mobilenet_yolov3_init, mobilenet_yolov3_run);
+	
+	benchmark("mobilenet-yolov3-416", mobilenet_yolov3_init2, mobilenet_yolov3_run2);
 
-    benchmark("mobilenet-yolo", mobilenet_yolo_init, mobilenet_yolo_run);
-
+	benchmark("yolov3-608", yolov3_init, yolov3_run);
     return 0;
 }
